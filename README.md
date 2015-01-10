@@ -1,4 +1,5 @@
-# Neo4J Quick Reference
+# Neo4j Quick Reference
+* [Neo4j Manual](http://neo4j.com/docs/pdf/neo4j-manual-2.1.6.pdf)
 
 The following is a quick guide to Neo4j.
 ######Neo4j is a property graph database. It consist of:
@@ -148,11 +149,56 @@ davies.createRelationshipTo(taylor, EmployeeRelationship.REPORTS_TO);
 
 We put time in milliseconds in the property because Neo4j supports only the following types/array of types: **boolean,byte,short,int,long,float,double,String**
 
+To store more complex types for arrays, we can:
+* Code them into primitive types as seen in the list above.
+    * E.g. To store a property such as the entire address fo a person, we can convert the address in JSON and store it as a string. This JSON format is the common way of storing data in document oriented DBs (Mongo DB), but since Neo4J isnt a document database, it wont build indexes on the properties of documents. This approach should only be used for raw data that wont be filtered or processed with Cypher.
+    * The best approach usually to **create nodes** for complex types. Since they can be filtered and indexed.
+    
+#### Cypher Basics
+
+**Cypher** - is Neo4j's declarative query language 
+
+**CREATE NODES:**
+```cypher
+CREATE (ee:Person { name: "Emil", from: "Sweden", klout: 99 })
+CREATE (ss:Person { name: "Shivam", from: "Sydney", klout: 99 })
+```
+* **CREATE** clause to create data
+* **()** parenthesis to indicate a node
+* **ee:Person** a variable 'ee' and label 'Person' for the new node
+* **{}** brackets to add properties to the node
+
+**FIND NODES**
+```cypher
+MATCH (ee:Person) WHERE ee.name = "Emil" RETURN ee;
+```
+* **MATCH** clause to specify a pattern of nodes and relationships
+* **(ee:Person)** a single node pattern with label 'Person' which will assign matches to the variable 'ee'
+* **WHERE** clause to constrain the results
+* **ee.name = "Emil"** compares name property to the value "Emil"
+* **RETURN** clause used to request particular results
 
 
+**CREATE RELATIONSHIPS**
+```cypher
+(ee)-[:KNOWS {since: 2015}]->(ss)
+```
 
+**DELETE SINGLE NODE**
+```cypher
+MATCH (n:Useless) DELETE n
+```
 
+**Delete a node and connected relationships**
+```cypher
+MATCH (n { name: 'Andres' })-[r]-() DELETE n, r
+```
 
-
+**DELETE ALL NODES and Relationship**
+```cypher
+MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n,r
+```
 
 
