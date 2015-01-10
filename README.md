@@ -182,7 +182,8 @@ MATCH (ee:Person) WHERE ee.name = "Emil" RETURN ee;
 
 **CREATE RELATIONSHIPS**
 ```cypher
-(ee)-[:KNOWS {since: 2015}]->(ss)
+Match (ee:Person {name:"Emil"}) Match (ss:User {name:"Shivam"})
+CREATE (ee)-[:KNOWS {since: 2015}]->(ss)
 ```
 
 **DELETE SINGLE NODE**
@@ -202,7 +203,7 @@ OPTIONAL MATCH (n)-[r]-()
 DELETE n,r
 ```
 
-######MERGE
+###### MERGE
 1. It ensures that a **pattern exists** if it does not exist then it creates it.
     *  ```REF#M1: MERGE (u1:User {name: "u1"})-[:FRIEND]-(u2:User {name:"u2"})```- In this case 
     since the pattern doesnt exist it will create one.
