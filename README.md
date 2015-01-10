@@ -1,5 +1,6 @@
 # Neo4j Quick Reference
-* [Neo4j Manual](http://neo4j.com/docs/pdf/neo4j-manual-2.1.6.pdf)
+* [Neo4j PDF Manual](http://neo4j.com/docs/pdf/neo4j-manual-2.1.6.pdf)
+* [Neo4j HTML Manual](http://neo4j.com/docs/2.1.6/)
 
 The following is a quick guide to Neo4j.
 ######Neo4j is a property graph database. It consist of:
