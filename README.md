@@ -202,6 +202,15 @@ MATCH (n)
 OPTIONAL MATCH (n)-[r]-()
 DELETE n,r
 ```
+###### ADDING NEW PROPERTIES TO EXISTING NODES/RELATIONSHIPS:
+
+The following statement adds the property "RECOMMEND" to the WATCHED Relationship
+```
+MATCH (u1:User{name:"Shiv"})-[w:WATCHED]->(v1) SET w += {RECOMMEND:'yes'};
+//The property can then be used on a WHERE CLAUSE
+MATCH (u1:User{name:"Bijal"})-[:FRIENDS]-(f1)-[w:WATCHED]-(v1) WHERE w.RECOMMEND='yes' return v1;
+```
+
 
 ###### MERGE
 1. It ensures that a **pattern exists** if it does not exist then it creates it.
