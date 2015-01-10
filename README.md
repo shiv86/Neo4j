@@ -202,4 +202,60 @@ OPTIONAL MATCH (n)-[r]-()
 DELETE n,r
 ```
 
+######MERGE
+1. It ensures that a **pattern exists** if it does not exist then it creates it.
+    *  ```REF#M1: MERGE (u1:User {name: "u1"})-[:FRIEND]-(u2:User {name:"u2"})```- In this case 
+    since the pattern doesnt exist it will create one.
+
+2. It **will NOT use partially existing (unbound) patterns**- it will **attempt to match the entire pattern** and **create** the entire **pattern if missing**
+    * ```MERGE (u1:User {name:"u1"})-[:FRIEND]-(u2:User { name:"u2" })-[:LIVES_IN]->(c:Country { name:"Australia" }) ``` - Here MERGE does not consider the partial pattern from above and hence will create a new one as per below:
+    ![](http://i.imgur.com/V9XUawh.png)
+    
+3. When unique constraints are defined, MERGE expects to find at most one node that matches the pattern
+4. It also allows you to [define what should happen](http://neo4j.com/docs/stable/query-merge.html#_use_on_create_and_on_match) based on whether data was created or matched
+
+**The key to understanding what part of the pattern is created if not matched is the concept of bound elements. So what is a bound element?**
+
+* An element is bound if the identifier was used in an earlier clause of the cypher statement
+
+In the above diagram (2) The entrie patterns has **no bound nodes**. Since merge won’t consider a partial pattern, it attempted to match the entire unbound pattern which does not exist, and created it.
+
+To avoid recreating nodes which already exist, bind the parts of the pattern you dont want to recreated
+
+```cypher
+MERGE (u1:User {name:"u1"}) // <- This binds User "u1" to variable u1
+MERGE (u2:User { name:"u2" }) // <- This binds User "u2" to variable u2
+
+//Since u1 and u2 are bound variables in the statement below, the two user nodes are not recreated. Note if User "u1" and "u2" did not exist then MERGE would create them
+MERGE (u1)-[:FRIEND]-(u2)-[:LIVES_IN]->(c:Country { name:"Australia" })
+```
+
+**Properties and nodes matching**
+
+```MERGE (u1:User {name: "u1",age:20})-[:FRIEND]-(u2:User {name:"u2"})```
+
+Assuming **REF#M1** has already executed and then the above statement is executed.
+This will create two more nodes and a FRIEND relationship between them.
+
+This is because MERGE could not find any User node that has both a name and age property that match and so it went ahead and created the entire pattern.
+
+Every property does not need to be specified to find a matching node- a subset will do. If we had a User node with properties name=”u1” and age=20 and then attempted to MERGE (u:User {name:”u1”}) it would not create a new node because it could match a User node with name=”u1”.
+
+Note that in case of **unique constraints** defined on User such as:
+
+```CREATE CONSTRAINT ON (u:User) ASSERT u.name IS UNIQUE;```
+
+In the case where a User node exists with name=”u1” (but no age)
+
+```MERGE (u1:User {name:”u1”,age:20})```
+
+will produce an exception:
+
+```Node already exists with label User and property "name"=[u1]```
+
+**This is expected because MERGE attempted to create a new node but the unique constraint was violated as a result of it.**
+
+
+
+
 
