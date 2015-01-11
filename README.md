@@ -266,11 +266,10 @@ MATCH (actors)-[:ACTED_IN]->(:Movie {title:'Apollo 13'}) return actors;
 An alternative way to do this is to use the ***** operator, which lets you explore all relationships/Nodes **X** number of steps away.
 
 As an example the below query return exactly the same result: Any nodes which are directly related to the **Apollo 13** movie
-```java
+
 MATCH (:Movie {title:'Apollo 13'})-[r]-(anyNodes) return anyNodes;
 // The [r*1] in the following query means all nodes which are only one step away a.k.a directly related to Apollo 13 movie, which returns the same result as the above query
 MATCH (:Movie {title:'Apollo 13'})-[r*1]-(anyNodes) return anyNodes;
-```
 
 So to answer the same question as before **give me a list all the potential directors I can get in touch with through my co actors from Apollo 13**
 We know that other directors exist atleast 3 Nodes away from the "Apollo" Node:
