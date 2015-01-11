@@ -210,6 +210,59 @@ MATCH (u1:User{name:"Shiv"})-[w:WATCHED]->(v1) SET w += {RECOMMEND:'yes'};
 //The property can then be used on a WHERE CLAUSE
 MATCH (u1:User{name:"Bijal"})-[:FRIENDS]-(f1)-[w:WATCHED]-(v1) WHERE w.RECOMMEND='yes' return v1;
 ```
+###### Filtering Relationships:
+
+If we wish to know the existing relationships between two nodes we introduce the **[r]** variable, where the relationship expression is specified in the square brackets.
+
+```java
+//RETURNS back all the actors in the Matrix
+MATCH (actors)-[:ACTED_IN]->(:Movie {title:'The Matrix'}) return actors;
+
+//RETURNS back all the Person(s) which have a relationship with the Movie Matrix.
+MATCH (actors)-[ACTED_IN]->(:Movie {title:'The Matrix'}) return actors;
+```
+
+**Note the relationship defined above without semicolon [ACTED_IN] matches the relationship type of "ANY"
+ and NOT to the relationship type of "ACTED_IN". Hence why the query above returns all Persons associated with the Movie "The Matrix".**
+
+Specify multiple relationships using the **"|"** operator.
+
+```java
+MATCH (actors)-[:ACTED_IN|DIRECTED]->(:Movie {title:'The Matrix'}) return actors;
+```
+
+###### Chaining Cypher Example:
+
+For these examples load the movies database.
+
+1. Who directed of Apollo 13:
+   ```java
+   MATCH (apolloDirector) -[d:DIRECTED]->(m:Movie {title:'Apollo 13'}) return apolloDirector;
+   ```
+   Pay **careful attention to the direction of the relationship**. For example the following would return an empty result since the relationship **DIRECTED** is only in the direction **from Person -> Movie** :
+   ```java   
+    MATCH (apolloDirector)<-[d:DIRECTED]-(m:Movie {title:'Apollo 13'}) return apolloDirector; 
+         ```
+      
+1. As one of the actors of Apollo13 I want to attempt to network with my co-actors and work with other directors.
+  * These are all the co-actors from the movie
+   ```java
+MATCH (actors)-[:ACTED_IN]->(:Movie {title:'Apollo 13'}) return actors;
+   ```   
+   * Or expressed using movie first gives the same result:
+   ```java
+   MATCH (:Movie {title:'Apollo 13'})<-[:ACTED_IN]-(actors) return actors;
+   ```
+   * Now I want to see all the the other movies my co-actors have acted in:
+   ```java
+   MATCH (:Movie {title:'Apollo 13'})<-[:ACTED_IN]-(actors)-[:ACTED_IN]->(otherMovies) return otherMovies;
+   ```
+   * Now I want to see all the other directors the my co-actors have worked with:
+   ```java
+   MATCH (:Movie {title:'Apollo 13'})<-[:ACTED_IN]-(actors)-[:ACTED_IN]->(otherMovies)<-[:DIRECTED]-(directors) return directors;
+   ```
+   **This gives me a list all the potential directors I can get in touch with through my co actors.**
+
 
 
 ###### MERGE
