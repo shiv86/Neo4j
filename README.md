@@ -279,6 +279,9 @@ We know that other directors exist atleast 3 Nodes away from the "Apollo" Node:
 Hence the following query would produce the same/very similar result as #QFR1 above.
 ```java
 MATCH (:Movie {title:'Apollo 13'})-[r*3]-(directors:Person)-[:DIRECTED]->(m:Movie) return directors;
+//Since we are only concerned about return nodes between 2-3 steps away we can also specify the relationship as [r*2..3] 
+//The below query will return the same result
+MATCH (:Movie {title:'Apollo 13'})-[r*2..3]-(directors:Person)-[:DIRECTED]->(m:Movie) return directors;
 ```
 
 ###### MERGE
