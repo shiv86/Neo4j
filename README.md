@@ -275,6 +275,7 @@ MATCH (:Movie {title:'Apollo 13'})-[r*1]-(anyNodes) return anyNodes;
 So to answer the same question as before **give me a list all the potential directors I can get in touch with through my co actors from Apollo 13**
 We know that other directors exist atleast 3 Nodes away from the "Apollo" Node:
 **: Apollo - (1) AnyNodeRelatedToApollo - (2)-[:ACTED_IN]->(m:Movie)<-(3)-[:DIRECTED]-(p:Person)**
+
 Hence the following query would produce the same/very similar result as #QFR1 above.
 ```java
 MATCH (:Movie {title:'Apollo 13'})-[r*3]-(directors:Person)-[:DIRECTED]->(m:Movie) return directors;
