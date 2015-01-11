@@ -269,9 +269,11 @@ As an example the below query return exactly the same result: Any nodes which ar
 
 So to answer the same question as before **give me a list all the potential directors I can get in touch with through my co actors from Apollo 13.**
 
-```cypher
+```java
 MATCH (:Movie {title:'Apollo 13'})-[r]-(anyNodes) return anyNodes;
-// The [r*1] in the following query means all nodes which are only one step away a.k.a directly related to Apollo 13 movie, which returns the same result as the above query
+/* The [r*1] in the following query means all nodes which are only one step away 
+a.k.a directly related to Apollo 13 movie, 
+which returns the same result as the above query */
 MATCH (:Movie {title:'Apollo 13'})-[r*1]-(anyNodes) return anyNodes;
 ```
 
@@ -279,10 +281,11 @@ We know that other directors exist at least 3 Nodes away from the "Apollo" Node:
 **: Apollo - (1) AnyNodeRelatedToApollo - (2)-[:ACTED_IN]->(m:Movie)<-(3)-[:DIRECTED]-(p:Person)**
 
 Hence the following query would produce the same/very similar result as #QFR1 above.
-```cypher
+```java
 MATCH (:Movie {title:'Apollo 13'})-[r*3]-(directors:Person)-[:DIRECTED]->(m:Movie) return directors;
-//Since we are only concerned about return nodes between 2-3 steps away we can also specify the relationship as [r*2..3] 
-//The below query will return the same result
+/*Since we are only concerned about return nodes between 2-3 steps away,
+we can also specify the relationship as [r*2..3] 
+The below query will return the same result */
 MATCH (:Movie {title:'Apollo 13'})-[r*2..3]-(directors:Person)-[:DIRECTED]->(m:Movie) return directors;
 ```
 
