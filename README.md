@@ -272,6 +272,7 @@ MATCH (:Movie {title:'Apollo 13'})-[r]-(anyNodes) return anyNodes;
 MATCH (:Movie {title:'Apollo 13'})-[r*1]-(anyNodes) return anyNodes;
 ```
 
+
 So to answer the same question as before **give me a list all the potential directors I can get in touch with through my co actors from Apollo 13**
 
 We know that other directors exist atleast 3 Nodes away from the "Apollo" Node:
