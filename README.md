@@ -244,10 +244,10 @@ For these examples load the movies database.
     MATCH (apolloDirector)<-[d:DIRECTED]-(m:Movie {title:'Apollo 13'}) return apolloDirector; 
          ```
       
-1. As one of the actors of Apollo13 I want to attempt to network with my co-actors and work with other directors.
+2. As one of the actors of Apollo13 I want to attempt to network with my co-actors and work with other directors.
   * These are all the co-actors from the movie
    ```java
-MATCH (actors)-[:ACTED_IN]->(:Movie {title:'Apollo 13'}) return actors;
+	MATCH (actors)-[:ACTED_IN]->(:Movie {title:'Apollo 13'}) return actors;
    ```   
    * Or expressed using movie first gives the same result:
    ```java
