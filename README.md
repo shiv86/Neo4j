@@ -263,6 +263,8 @@ MATCH (actors)-[:ACTED_IN]->(:Movie {title:'Apollo 13'}) return actors;
    ```
    **This gives me a list all the potential directors I can get in touch with through my co actors.**
 
+
+#### Relationship Depth
 An alternative way to do this is to use the ***** operator, which lets you explore all relationships/Nodes **X** number of steps away.
 
 As an example the below query return exactly the same result: Any nodes which are directly related to the **Apollo 13** movie.
@@ -305,7 +307,7 @@ MATCH (:Movie {title:'Apollo 13'})-[r*2..3]-(directors:Person)-[:DIRECTED]->(m:M
 
 * An element is bound if the identifier was used in an earlier clause of the cypher statement
 
-In the above diagram (2) The entrie patterns has **no bound nodes**. Since merge won’t consider a partial pattern, it attempted to match the entire unbound pattern which does not exist, and created it.
+In the above diagram (2) The entire patterns has **no bound nodes**. Since merge won’t consider a partial pattern, it attempted to match the entire unbound pattern which does not exist, and created it.
 
 To avoid recreating nodes which already exist, bind the parts of the pattern you dont want to recreated
 
