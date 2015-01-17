@@ -1,0 +1,32 @@
+MATCH (n)
+OPTIONAL MATCH (n)-[r]-()
+DELETE n,r
+
+CREATE (ss:Person { name: "Shivam"});
+CREATE (ss:Person { name: "Bijal"});
+CREATE (ss:Person { name: "Deepak"});
+
+MATCH (n) return n;
+
+MERGE (ss:Person { name: "Shivam"}) MERGE (bp:Person { name: "Bijal"})
+MERGE (ss)-[:FRIENDS {since: 2014}]-(bp);
+
+
+CREATE (v1:Video {name:'FunnyCatVideo'})
+
+
+
+MERGE (ss:Person { name: "Shivam"}) MERGE (v1:Video {name:'MehVideo'}) MERGE (ss)-[:WATCHED {tag:["Bijal","Deepak"]}]-(v1);
+
+
+MATCH (ss:Person { name: "Deepak"})-[:FRIENDS]-(friends)-[w:WATCHED]->(videos)
+return videos;
+
+MATCH (ss:Person { name: "Deepak"})-[:FRIENDS]-(friends)-[w:WATCHED]->(videos)
+WHERE ANY (tag IN w.tag WHERE tag = "Deepak")
+return videos;
+
+MATCH (ss:Person { name: "Bijal"})-[:FRIENDS]-(friends)-[w:WATCHED]->(videos)
+WHERE ANY (tag IN w.tag WHERE tag = "Bijal")
+AND NOT(ss-[:WATCHED]->(videos)) 
+RETURN videos;
